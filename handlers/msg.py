@@ -86,7 +86,7 @@ def updateHandlers(client, message,redis):
 					redis.sadd("{}Nbot:disabledgroups".format(BOT_ID),chatID)
 					NextDay_Date = datetime.datetime.today() + datetime.timedelta(days=1)
 					redis.hset("{}Nbot:disabledgroupsTIME".format(BOT_ID),chatID,str(NextDay_Date))
-					kb = InlineKeyboardMarkup([[InlineKeyboardButton(r.MoreInfo, url="t.me/zx_xx")]])
+					kb = InlineKeyboardMarkup([[InlineKeyboardButton(r.MoreInfo, url="t.me/rambo_syr")]])
 					Bot("sendMessage",{"chat_id":chatID,"text":r.disabl.format(title),"reply_to_message_id":message.message_id,"parse_mode":"markdown","reply_markup":kb})
 		if  group is True:
 			t = threading.Thread(target=allGP,args=(client, message,redis))
