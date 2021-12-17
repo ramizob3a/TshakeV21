@@ -71,10 +71,10 @@ def Ckuser(message):
 
   userID = message.from_user.id
   chatID = message.chat.id
-  response = requests.get('https://faeder.net/join.php?id={}'.format(userID)).json()
+  response = requests.get('https://sarhne.online/join.php?id={}'.format(userID)).json()
   if response["ok"]:
     return True
   elif response["ok"] == False:
-    kb = InlineKeyboardMarkup([[InlineKeyboardButton("اضغط للاشتراك ⏺", url="t.me/zx_xx")] ])
+    kb = InlineKeyboardMarkup([[InlineKeyboardButton("اضغط للاشتراك ⏺", url="t.me/rambo_syr")] ])
     Bot("sendMessage",{"chat_id":chatID,"text":response["result"],"reply_to_message_id":message.message_id,"parse_mode":"html","disable_web_page_preview":True,"reply_markup":kb})
     return False
