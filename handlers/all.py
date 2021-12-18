@@ -50,7 +50,7 @@ def allGP(client, message,redis):
         Bot("sendMessage",{"chat_id":chatID,"text":r.userNocc,"reply_to_message_id":message.message_id,"parse_mode":"html"})
 
     if re.search(c.sors,text):
-      kb = InlineKeyboardMarkup([[InlineKeyboardButton("قناه السورس 📢", url="t.me/rambo_syr")],[InlineKeyboardButton("تواصل السورس 💬", url="t.me/NNNNH")],[InlineKeyboardButton("شروحات السورس 📑", url="t.me/rambo_syr")]])
+      kb = InlineKeyboardMarkup([[InlineKeyboardButton("قناه السورس 📢", url="t.me/rambo_syr")]])
       Botuser = client.get_me().username
       Bot("sendMessage",{"chat_id":chatID,"text":r.sors.format("@"+Botuser),"disable_web_page_preview":True,"reply_to_message_id":message.message_id,"parse_mode":"markdown","reply_markup":kb})
     
