@@ -57,7 +57,7 @@ def updateCallback(client, callback_query,redis):
   chatID = callback_query.message.chat.id
   userFN = callback_query.from_user.first_name
   title = callback_query.message.chat.title
-  message_id = callback_query.message.message_id
+  message_id = callback_query.message.id
   date = json.loads(callback_query.data)
   
   group = redis.sismember("{}Nbot:groups".format(BOT_ID),chatID)
@@ -169,12 +169,13 @@ def updateCallback(client, callback_query,redis):
     if date[0] == "dlf":
       File = date[1]
       os.system("rm ./files/"+File)
-      url = "https://raw.githubusercontent.com/ramizob3a/TshakeV2-files/master/"+File
+      url = "https://raw.githubusercontent.com/TshAkEAb/TshakeV2-files/master/"+File
       out = requests.get(url).text
       f = open("./files/"+File,"w+")
       f.write(out)
       f.close()
-      Bot("editMessageText",{"chat_id":chatID,"text":r.Dua.format(File),"message_id":message_id,"parse_mode":"html","disable_web_page_preview":True})
+      reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("الملفات", callback_data=json.dumps(["sf","",userID]))]])
+      Bot("editMessageText",{"chat_id":chatID,"text":r.Dua.format(File),"message_id":message_id,"parse_mode":"html","disable_web_page_preview":True,"reply_markup":reply_markup})
 
     if date[0] == "au":
       File = date[1]
@@ -193,6 +194,20 @@ def updateCallback(client, callback_query,redis):
         array.append([InlineKeyboardButton(f+" "+s,callback_data=json.dumps(["au",f,userID]))])
       kb = InlineKeyboardMarkup(array)
       Bot("editMessageReplyMarkup",{"chat_id":chatID,"message_id":message_id,"disable_web_page_preview":True,"reply_markup":kb})
+
+    if date[0] == "sf":
+
+      onlyfiles = [f for f in listdir("files") if isfile(join("files", f))]
+      filesR = redis.smembers("{}Nbot:botfiles".format(BOT_ID))
+      array = []
+      for f in onlyfiles:
+        if f in filesR:
+          s = r.true
+        else:
+          s = r.false
+        array.append([InlineKeyboardButton(f+" "+s,callback_data=json.dumps(["au",f,userID]))])
+      kb = InlineKeyboardMarkup(array)
+      Bot("editMessageText",{"chat_id":chatID,"text":r.Files,"message_id":message_id,"parse_mode":"html","disable_web_page_preview":True,"reply_markup":kb})
 
     if date[0] == "twostepset":
       get = date[1] 
@@ -225,7 +240,7 @@ def updateCallback(client, callback_query,redis):
       
     if date[0] == "delmsgclick":
       Bot("deleteMessage",{"chat_id":chatID,"message_id":message_id})
-      Bot("deleteMessage",{"chat_id":chatID,"message_id":callback_query.message.reply_to_message.message_id})
+      Bot("deleteMessage",{"chat_id":chatID,"message_id":callback_query.message.reply_to_message.id})
 
     if date[0] == "ckGPs":
       rank = isrank(redis,userID,chatID)
@@ -264,7 +279,7 @@ def updateCallback(client, callback_query,redis):
       edits = (redis.hget("{}Nbot:{}:edits".format(BOT_ID,chatID),userID) or 0)
       rate = int(msgs)*100/20000
       age = getAge(userID,r)
-      reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(Name(userFN),url="t.me/rambo_syr")],[InlineKeyboardButton(r.Rrank.format(t),url="t.me/rambo_syr")],[InlineKeyboardButton(r.Rmsgs.format(msgs),url="t.me/rambo_syr")],[InlineKeyboardButton(r.Rrate.format(str(rate)+"%"),url="t.me/rambo_syr")],[InlineKeyboardButton(r.Redits.format(edits),url="t.me/rambo_syr")],[InlineKeyboardButton(r.Rage.format(age),url="t.me/rambo_syr")]])
+      reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(Name(userFN),url="t.me/zx_xx")],[InlineKeyboardButton(r.Rrank.format(t),url="t.me/zx_xx")],[InlineKeyboardButton(r.Rmsgs.format(msgs),url="t.me/zx_xx")],[InlineKeyboardButton(r.Rrate.format(str(rate)+"%"),url="t.me/zx_xx")],[InlineKeyboardButton(r.Redits.format(edits),url="t.me/zx_xx")],[InlineKeyboardButton(r.Rage.format(age),url="t.me/zx_xx")]])
       Bot("editMessageReplyMarkup",{"chat_id":chatID,"message_id":message_id,"disable_web_page_preview":True,"reply_markup":reply_markup})
     if re.search("ShowO",date[0]):
       T = date[0].replace("ShowO","")
@@ -629,12 +644,7 @@ def updateCallback(client, callback_query,redis):
       Bot("editMessageText",{"chat_id":chatID,"text":r.DoneDelList,"message_id":message_id,"disable_web_page_preview":True})
 
     if date[0] == "delListrestricteds":
-      arrays = redis.smembers("{}Nbot:{}:restricteds".format(BOT_ID,chatID))
-      for user in arrays:
-        GetGprank = GPranks(user,chatID)
-        if GetGprank == "restricted":
-          Bot("restrictChatMember",{"chat_id": chatID,"user_id": user,"can_send_messages": 1,"can_send_media_messages": 1,"can_send_other_messages": 1,"can_send_polls": 1,"can_change_info": 1,"can_add_web_page_previews": 1,"can_pin_messages": 1,})
-        redis.srem("{}Nbot:{}:restricteds".format(BOT_ID,chatID),user)
+      arrays = redis.delete("{}Nbot:{}:restricteds".format(BOT_ID,chatID))
       Bot("editMessageText",{"chat_id":chatID,"text":r.DoneDelList,"message_id":message_id,"disable_web_page_preview":True})
 
     if date[0] == "LandU":
@@ -726,3 +736,4 @@ def updateCallback(client, callback_query,redis):
           importlib.reload(U)
         except Exception as e:
           pass
+
