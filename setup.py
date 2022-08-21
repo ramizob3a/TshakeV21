@@ -2,7 +2,7 @@ import requests,os
 
 try:
   from config import *
-  os.system('pm2 start bot.py --name {} --interpreter python3.8 --interpreter-args -u'.format(BOT_ID))
+  os.system('pm2 start bot.py --name {} --interpreter python3.9 --interpreter-args -u'.format(BOT_ID))
 except Exception as e:
   API_ID = 3430048
   API_HASH = '18421cc4c253105ca5d6eb7a243ede46'
@@ -35,4 +35,4 @@ API_HASH = '18421cc4c253105ca5d6eb7a243ede46'
   f.write(out)
   f.close()
 
-  os.system('pm2 start bot.py -f --name {} --interpreter python3.8 --interpreter-args -u'.format(ID))
+  os.system('pm2 start bot.py -f --name {} --interpreter python3.9 --interpreter-args -u'.format(ID))
