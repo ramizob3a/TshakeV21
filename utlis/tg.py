@@ -8,6 +8,7 @@ from pyrogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyb
 def Bot(method,data):
   url = "https://api.telegram.org/bot{}/{}".format(TOKEN,method)
   post = requests.post(url,data=data)
+  #print(post.json())
   return post.json()
 
 
@@ -70,13 +71,10 @@ def Ckuser(message):
 
   userID = message.from_user.id
   chatID = message.chat.id
-  try:
-    response = requests.get('https://faeder.net/192.168.1.1/join.php?id={}'.format(userID)).json()
-    if response["ok"]:
-      return True
-    elif response["ok"] == False:
-      kb = InlineKeyboardMarkup([[InlineKeyboardButton("اضغط للاشتراك ⏺", url="t.me/RAMBO_SYR")] ])
-      Bot("sendMessage",{"chat_id":chatID,"text":response["result"],"reply_to_message_id":message.id,"parse_mode":"html","disable_web_page_preview":True,"reply_markup":kb})
-      return False
-  except Exception as e:
+  response = requests.get('https://sarhne.online/join.php?id={}'.format(userID)).json()
+  if response["ok"]:
     return True
+  elif response["ok"] == False:
+    kb = InlineKeyboardMarkup([[InlineKeyboardButton("اضغط للاشتراك ⏺", url="t.me/rambo_syr")] ])
+    Bot("sendMessage",{"chat_id":chatID,"text":response["result"],"reply_to_message_id":message.message_id,"parse_mode":"html","disable_web_page_preview":True,"reply_markup":kb})
+    return False
